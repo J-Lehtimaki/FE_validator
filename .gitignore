@@ -1,3 +1,6 @@
+# Own, personal directories added to the project
+nTop_root/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
