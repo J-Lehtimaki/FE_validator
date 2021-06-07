@@ -26,6 +26,7 @@ class RegionFileFinder:
         self._searchPath = pathSampleRoot
         self._majIDList = self.getMajorVersionsFound()
         self._idDict = {}
+
         self._foundPinFiles = []
         self._foundThreadFiles = []
         self._foundPRFiles = []
@@ -45,6 +46,12 @@ class RegionFileFinder:
     def initiateMajorVersionDict(self):
         for id in self._majIDList:
             self._idDict[id] = []
+
+    def findFilesAndGroupToMajID(self):
+        self.findFEAresultFiles()
+        self.findPinFiles()
+        self.findThreadFiles()
+        self.findPRFiles()
 
     # For each major id, initializes all pin boundary files found
     def findPinFiles(self):
@@ -107,3 +114,4 @@ class RegionFileFinder:
                 groupIDs[groupID].append(path)
 
         return groupIDs
+

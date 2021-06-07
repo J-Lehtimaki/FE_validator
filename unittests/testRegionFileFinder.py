@@ -33,25 +33,15 @@ class RegionFileFinderTestCase(unittest.TestCase):
         a = self._RegFileFinder.findFEAresultFiles()
 
     def testGetMajorVersionDict(self):
-        a = self._RegFileFinder.findPinFiles()
-        b = self._RegFileFinder.findThreadFiles()
-        c = self._RegFileFinder.findPRFiles()
-        d = self._RegFileFinder.findFEAresultFiles()
-
-        e = self._RegFileFinder.getMajorVersionDict()
-
+        a = self._RegFileFinder.findFilesAndGroupToMajID()
+        b = self._RegFileFinder.getMajorVersionDict()
         # Eyeball the results, all good
         with open(ABSPATH_MAJVER_JSONDUMP, 'w') as outfile:
-            json.dump(e, outfile, indent=2)
+            json.dump(b, outfile, indent=2)
         
     def testGroupFileLists(self):
-        a = self._RegFileFinder.findPinFiles()
-        b = self._RegFileFinder.findThreadFiles()
-        c = self._RegFileFinder.findPRFiles()
-        d = self._RegFileFinder.findFEAresultFiles()
-
-        e = self._RegFileFinder.groupIDfileLists()
-
+        a = self._RegFileFinder.findFilesAndGroupToMajID()
+        b = self._RegFileFinder.groupIDfileLists()
         # Again eyeball the results in the json file produced
         with open(ABSPATH_GROUPS_JSONDUMP, 'w') as outfile:
-            json.dump(e, outfile, indent=2)
+            json.dump(b, outfile, indent=2)
