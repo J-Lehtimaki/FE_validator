@@ -94,7 +94,7 @@ class RegionFileFinder:
         # group at this stage
         for key in self._idDict:
             for path in self._idDict[key]:
-                temp = path.split('\\')[-1].split('_')
+                temp = path.strip('.csv').split('\\')[-1].split('_')
                 groupID = '_'.join([temp[1],temp[2],temp[3]]) # majverid_material_threshold
                 groupIDs[groupID] = []
 
@@ -102,7 +102,7 @@ class RegionFileFinder:
         # have that ID
         for key in self._idDict:
             for path in self._idDict[key]:
-                temp = path.split('\\')[-1].split('_')
+                temp = path.strip('.csv').split('\\')[-1].split('_')
                 groupID = '_'.join([temp[1],temp[2],temp[3]]) # majverid_material_threshold
                 groupIDs[groupID].append(path)
 
