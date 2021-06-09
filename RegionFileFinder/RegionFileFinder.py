@@ -22,8 +22,9 @@ from .ENVregionFileFinder import \
     FEA_RESULT_DESCR
 
 class RegionFileFinder:
-    def __init__(self, pathSampleRoot):
-        self._searchPath = pathSampleRoot
+    def __init__(self, searchPath, folderVerMajorsPath):
+        self._searchPath = searchPath
+        self._folderVerMajorsPath = folderVerMajorsPath
         self._majIDList = self.getMajorVersionsFound()
         self._idDict = {}
 
@@ -115,3 +116,47 @@ class RegionFileFinder:
 
         return groupIDs
 
+    # Returns files for CppFEvalidator input mesh files for those sets that have
+    # all necessary files generated.
+    def filterIncompleteIDfileLists(self):
+        nonFiltered = self.groupIDfileLists()
+        filtered = {}
+        for key in nonFiltered:
+            if(len(nonFiltered[key])==4):
+                filtered[key] = nonFiltered[key]
+        return filtered
+
+    # Adds export paths to filteredIncompleteIDFileList for CppFErunner
+    def addCppFerunnerExportPaths(self):
+        inputFileDictList = self.filterIncompleteIDfileLists()
+        for i in inputFileDictList:
+            subtractNodeStressFilename = f"subtractNodeStress_{i}"
+            subtractRegionGenStressDataFilename = f"subtrRegGenStressData_{i}"
+            idNumber = inputFileDictList[i][0].split("\\")[-3]
+            pathNodeStress = os.path.join(
+                self._folderVerMajorsPath,
+                idNumber,
+                "FEA",
+                subtractNodeStressFilename
+            )
+            pathRegStressGenData = os.path.join(
+                self._folderVerMajorsPath,
+                idNumber,
+                "FEA",
+                subtractRegionGenStressDataFilename
+            )
+            inputFileDictList[i].append(pathNodeStress)
+            inputFileDictList[i].append(pathRegStressGenData)
+        return inputFileDictList
+
+    # Returns the dict of all sets for CppFErunner.
+    # Design limit stress is controlled from param1.
+    # Return:
+    #  dict of all the existing complete samples that can be checked
+    #  for feasibility in the given design stress limits.
+    def getCompleteFErunnerParameterSet(self, materialDesignLimitStress):
+        retval = self.addCppFerunnerExportPaths()
+        for key in retval:
+            material = key.split("_")[1]
+            retval[key].append(str(materialDesignLimitStress[material]))
+        return retval

@@ -1,5 +1,6 @@
 # Own, personal directories added to the project
 nTop_root/
+test_export/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
